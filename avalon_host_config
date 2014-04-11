@@ -42,6 +42,10 @@ if($ARGV[0] eq "start") {
     print "Avalon_Host_Config:  Setting config to use $HOST\n";
 
     $conf = AvalonConfig::YAML->new($avalon_yml);
+    $conf->set('production.domain.host', 
+           "$HOST");
+    $conf->set('production.domain.port', 
+           "80");
     $conf->set('production.dropbox.upload_uri', 
 	       "sftp://$HOST/var/avalon/dropbox");
     $conf->set('production.streaming.rtmp_base',
