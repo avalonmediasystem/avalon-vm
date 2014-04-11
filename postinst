@@ -1,0 +1,7 @@
+cd /usr/share/avalon-vm
+chmod 644 EULA.avalon logo.png AvalonConfig.pm
+chmod 755 buildFFMPEG avalon_config_email avalon_randomize_passwords dist-prep make_tarball
+mkdir /usr/share/firstboot/modules
+/usr/bin/install --mode=644 avalon_*.py /usr/share/firstboot/modules
+/usr/bin/install --mode=755 avalon_host_config /etc/init.d
+/sbin/chkconfig avalon_host_config on
