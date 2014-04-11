@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# remove avalon hostname def and install logs
+rm /etc/sysconfig/avalon_host_config
+rm /root/avalon-setup.log
+rm /root/ffmpeg-build.log
+
+# remove root's bash history
+rm /root/.bash_history
+
+# start firstboot next time
+touch /etc/reconfigSys
+rm /etc/sysconfig/firstboot
+chkconfig firstboot on
+
+# get rid of all traces of the binary ffmpeg.
+rpm --erase --nodeps ffmpeg
+rpm --erase --nodeps ffmpeg-libs
+rm -rf /home/makerpm/rpmbuild
+
+# sometimes this will prompt at boot and this turns off the prompt
+/usr/local/rvm/bin/rvm rvmrc warning ignore all.rvmrcs
+
+# make sshd regenerate the host keys
+rm -f /etc/ssh/ssh_host_key
+rm -f /etc/ssh/ssh_host_rsa_key
+rm -f /etc/ssh/ssh_host_dsa_key
+
+# make sure no mac addresses end up in the distributed vm
+if [ -e /etc/sysconfig/network-scripts/ifcfg-eth0 ]; then
+    mv /etc/sysconfig/network-scripts/ifcfg-eth0 /tmp/ifcfg-eth0
+    grep -v HWADDR /tmp/ifcfg-eth0 | \
+	grep -v UUID | \
+	grep -v DHCP_CLIENT_ID > /etc/sysconfig/network-scripts/ifcfg-eth0
+fi
+
+# remove old dhcp clutter
+rm -f /var/lib/dhclient/*
+
+
+# rebuild EULA
+cat /usr/share/avalon/EULA.avalon > /usr/share/avalon/EULA
+echo "==========" >> /usr/share/avalon/EULA
+cat /usr/share/doc/redhat-release*/*EULA* >> /usr/share/avalon/EULA
+
+# move any troublesome Firstboot Modules out of the way
+pushd /usr/share/firstboot/modules
+for n in welcome.py firstboot_kdump.py eula.py; do
+    mv -f $n $n.avalonsave
+done
+popd
+
+# remove the debugging shell, if it exists.
+#rm -f /usr/share/firstboot/modules/debug.py
+
+# put licenses in /usr/share/doc
+ln -s /usr/local/red5/license.txt /usr/share/doc/red5-license.txt
+ln -s /usr/local/fedora/docs /usr/share/doc/fedora
+curl https://raw.github.com/avalonmediasystem/avalon-felix/release/1.0.0/NOTICE > /usr/share/doc/avalon-felix.NOTICE
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Starting build... "
+cd /home/makerpm
+runuser -l makerpm ./install_ffmpeg_src.sh
+rpm -Uvh /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-[1l]*.rpm
+rc=$?
+echo "Build and install completed with return code $rc"
+echo ""
+echo "Press the 'Forward' button to continue."
+exit $rc
+

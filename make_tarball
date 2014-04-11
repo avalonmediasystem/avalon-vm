@@ -1,0 +1,13 @@
+#!/bin/bash
+VERSION=avalon-vm-1.0
+
+rm -rf /tmp/$VERSION
+mkdir /tmp/$VERSION
+cp /etc/init.d/avalon_host_config /tmp/$VERSION
+cp /usr/share/avalon/* /tmp/$VERSION
+rm /tmp/$VERSION/*~
+cp /usr/share/firstboot/modules/avalon_*.py /tmp/$VERSION
+cp /root/rpmbuild/SPECS/avalon-vm.spec /tmp/$VERSION
+cd /tmp
+tar -czvf $VERSION.tar.gz $VERSION
+cp $VERSION.tar.gz /root/rpmbuild/SOURCES

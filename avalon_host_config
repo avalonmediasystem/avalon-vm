@@ -1,0 +1,94 @@
+#!/usr/bin/perl
+# chkconfig: 345 70 10
+# description: set up avalon to match the current network settings
+#
+
+use lib "/usr/share/avalon";
+use AvalonConfig;
+use Socket;
+
+my $avalon_yml = "/var/www/avalon/shared/avalon.yml";
+my $config_properties = "/usr/local/matterhorn/etc/config.properties";
+my $avalon_conf = "/etc/httpd/conf.d/10-avalon.conf";
+
+if(-e "/etc/sysconfig/avalon_host_config") {
+    open(H, "/etc/sysconfig/avalon_host_config");
+    chomp($HOST=<H>);
+    close(H);
+}
+if($HOST eq "") {
+    open(H, "/sbin/ip -family inet addr list primary scope global|");
+    while(<H>) {
+	if(m/inet\s+(\d+(\.\d+){3})\//) {
+	    my $ip = $1;
+	    my($name) = gethostbyaddr(inet_aton($ip), AF_INET);
+	    if($name ne "") {
+		$HOST = $name;
+	    } else {
+		$HOST = $ip;
+	    }
+	}
+    }
+    close(H);
+    if($HOST eq "") {
+	$HOST eq "localhost";
+    }
+}
+
+
+
+if($ARGV[0] eq "start") {
+    # update avalon config
+    print "Avalon_Host_Config:  Setting config to use $HOST\n";
+
+    $conf = AvalonConfig::YAML->new($avalon_yml);
+    $conf->set('production.dropbox.upload_uri', 
+	       "sftp://$HOST/var/avalon/dropbox");
+    $conf->set('production.streaming.rtmp_base',
+	       "rtmp://$HOST/avalon");
+    $conf->set('production.streaming.http_base',
+	       "http://$HOST/streams");
+    $conf->set('production.matterhorn.root',
+	       "http://$HOST:18080");
+    $conf->close();
+
+    $conf = AvalonConfig::Properties->new($config_properties);
+    $conf->set('org.opencastproject.server.url',
+	       "http://$HOST:18080");
+    $conf->set('org.avalonmediasystem.avalon.url',
+	       "http://$HOST/");
+    $conf->close();
+
+    $conf = AvalonConfig::Text->new($avalon_conf);
+    $conf->set("\\s*ServerName\\s+", "  ServerName  $HOST");
+    $conf->close();
+    
+} elsif($ARGV[0] eq "hostname") {
+    print $HOST, "\n";
+} elsif($ARGV[0] eq "sethostname" && $ARGV[1]!~m/^\s*$/) {
+    open(H, ">/etc/sysconfig/avalon_host_config");
+    print H $ARGV[1], "\n";
+    close(H);
+    AvalonConfig::log("/etc/sysconfig/avalon_host_config", "Setting default hostname to '$ARGV[1]'");
+}
+
+
+# add the hostname given to us by DHCP to the 127 localhost line, if the
+# hostname -f doesn't work.
+system("hostname -f 2>&1 > /dev/null");
+if($? != 0) {
+    chomp($hostname = `hostname`);
+    open(H, "/etc/hosts");
+    @hosts = <H>;
+    close(H);
+    open(H, ">/etc/hosts");
+    foreach (@hosts) {
+	chomp;
+	if(m/127.0.0.1/) {
+	    print H "$_ $hostname\n";
+	} else {
+	    print H "$_\n";
+	}
+    }
+    close(H);
+}

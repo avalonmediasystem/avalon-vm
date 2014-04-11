@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use lib '/usr/share/avalon';
+use AvalonConfig;
+
+
+my $avalon_yml = "/var/www/avalon/shared/avalon.yml";
+my $database_yml = "/var/www/avalon/shared/database.yml";
+my $fedora_yml = "/var/www/avalon/shared/fedora.yml";
+my $fedora_users_xml = "/usr/local/fedora/server/config/fedora-users.xml";
+my $matterhorn_yml = "/var/www/avalon/shared/matterhorn.yml";
+my $config_properties = "/usr/local/matterhorn/etc/config.properties";
+my $tomcat_users_xml = "/usr/local/tomcat/conf/tomcat-users.xml";
+
+open(LOG, ">>/root/avalon-setup.log");
+$|=1;
+
+if(scalar(@ARGV) < 5) {
+    print "Usage: $0 <comments-email> <notifications-email> <support-email> <smtp-server-address> <mail-port>\n";
+    print "   Use '-' for any options that shouldn't be changed.\n";
+    exit 1;
+}
+
+my($COMMENTS, $NOTIFICATIONS, $SUPPORT, $MAILER, $MAILPORT) = @ARGV;
+
+my $conf = AvalonConfig::YAML->new($avalon_yml);
+$conf->set('production.email.notification', $NOTIFICATIONS)
+    if($NOTIFICATIONS ne "-");
+$conf->set('production.email.comments', $COMMENTS) if($COMMENTS ne "-");
+$conf->set('production.email.support', $SUPPORT) if($SUPPORT ne "-");
+$conf->set('production.email.mailer.smtp.address', $MAILER) if($MAILER ne "-");
+$conf->set('production.email.mailer.smtp.port', $MAILPORT) if($MAILPORT ne "-");
+$conf->close();
+
+my $conf = AvalonConfig::Properties->new($config_properties);
+$conf->set('org.opencastproject.admin.email', $SUPPORT) if($SUPORT ne "-");
+$conf->close();
+
