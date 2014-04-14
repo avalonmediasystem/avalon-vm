@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-use lib '/usr/share/avalon';
+use lib '/usr/share/avalon-vm';
 use AvalonConfig;
 
 

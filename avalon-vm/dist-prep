@@ -39,9 +39,9 @@ rm -f /var/lib/dhclient/*
 
 
 # rebuild EULA
-cat /usr/share/avalon/EULA.avalon > /usr/share/avalon/EULA
-echo "==========" >> /usr/share/avalon/EULA
-cat /usr/share/doc/redhat-release*/*EULA* >> /usr/share/avalon/EULA
+cat /usr/share/avalon-vm/EULA.avalon > /usr/share/avalon-vm/EULA
+echo "==========" >> /usr/share/avalon-vm/EULA
+cat /usr/share/doc/redhat-release*/*EULA* >> /usr/share/avalon-vm/EULA
 
 # move any troublesome Firstboot Modules out of the way
 pushd /usr/share/firstboot/modules

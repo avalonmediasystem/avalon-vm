@@ -45,7 +45,7 @@ class moduleClass(Module):
         self.built = False
         self.running = False
         self.avalon_host_config = "/etc/init.d/avalon_host_config"
-        self.avalon_randomize_passwords = "/usr/share/avalon/avalon_randomize_passwords"
+        self.avalon_randomize_passwords = "/usr/share/avalon-vm/avalon_randomize_passwords"
 
     def _showErrorMessage(self, text):
         dlg = gtk.MessageDialog(None, 0, gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, text)

@@ -3,7 +3,7 @@
 # description: set up avalon to match the current network settings
 #
 
-use lib "/usr/share/avalon";
+use lib "/usr/share/avalon-vm";
 use AvalonConfig;
 use Socket;
 

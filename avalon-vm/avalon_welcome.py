@@ -64,7 +64,7 @@ class moduleClass(Module):
 
         self.vbox.pack_start(label, False, True)
         try:
-            self.vbox.pack_start(loadToImage("/usr/share/avalon/logo.png"), True, True, 5)
+            self.vbox.pack_start(loadToImage("/usr/share/avalon-vm/logo.png"), True, True, 5)
         except:
             self.vbox.pack_start(loadToImage(config.themeDir + "/splash-small.png"), True, True, 5)
 

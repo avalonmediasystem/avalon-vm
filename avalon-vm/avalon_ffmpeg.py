@@ -43,7 +43,7 @@ class moduleClass(Module):
         self.built = False
         self.running = False
         self.buildCommand = ['/usr/bin/script', '-f', '-c',
-                             '/usr/share/avalon/buildFFMPEG',
+                             '/usr/share/avalon-vm/buildFFMPEG',
                              '/root/ffmpeg-build.log']
 
     def apply(self, interface, testing=False):

@@ -44,7 +44,7 @@ class moduleClass(Module):
         self.icon = "workstation.png"
         self.built = False
         self.running = False
-        self.buildCommand = "/usr/share/avalon/avalon_config_email"
+        self.buildCommand = "/usr/share/avalon-vm/avalon_config_email"
 
     def apply(self, interface, testing=False):
         os.system(self.buildCommand + 

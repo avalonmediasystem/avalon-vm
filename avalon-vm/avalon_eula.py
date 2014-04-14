@@ -40,7 +40,7 @@ class moduleClass(Module):
         self.sidebarTitle = N_("License Information")
         self.title = N_("License Information")
         self.icon = "workstation.png"
-        self.eula_path = "/usr/share/avalon/EULA"
+        self.eula_path = "/usr/share/avalon-vm/EULA"
 
         
     def apply(self, interface, testing=False):
