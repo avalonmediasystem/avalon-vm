@@ -96,7 +96,7 @@ class moduleClass(Module):
                   "bundle exec rake avalon:user:create avalon_username=" +
                   self.usernameEntry.get_text() + " " +
                   "avalon_password='" + self.passwordEntry.get_text() + "' " +
-                  "avalon_groups=collection_manager,group_manager\"")
+                  "avalon_groups=administrator\"")
 
         os.system("runuser -l root -c \"" +
                   "cd /var/www/avalon/current; " +
