@@ -37,6 +37,9 @@ fi
 # remove old dhcp clutter
 rm -f /var/lib/dhclient/*
 
+# make sure /etc/init.d/network waits for the network to initialize
+# before reporting successful startup
+echo "NETWORKWAIT=yes" >> /etc/sysconfig/network
 
 # rebuild EULA
 cat /usr/share/avalon-vm/EULA.avalon > /usr/share/avalon-vm/EULA
