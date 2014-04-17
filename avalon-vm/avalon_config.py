@@ -98,12 +98,6 @@ class moduleClass(Module):
                   "avalon_password='" + self.passwordEntry.get_text() + "' " +
                   "avalon_groups=administrator\"")
 
-        os.system("runuser -l root -c \"" +
-                  "cd /var/www/avalon/current; " +
-                  "RAILS_ENV=production " +
-                  "bundle exec rake avalon:user:delete " +
-                  "avalon_username=archivist1@example.com\"")
-
         return RESULT_SUCCESS
 
     def createScreen(self):
