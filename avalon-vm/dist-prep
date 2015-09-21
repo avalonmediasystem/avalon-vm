@@ -16,7 +16,7 @@ chkconfig firstboot on
 # get rid of all traces of the binary ffmpeg.
 rpm --erase --nodeps ffmpeg
 rpm --erase --nodeps ffmpeg-libs
-rm -rf /home/makerpm/rpmbuild
+#rm -rf /home/makerpm/rpmbuild
 
 # sometimes this will prompt at boot and this turns off the prompt
 /usr/local/rvm/bin/rvm rvmrc warning ignore all.rvmrcs
@@ -60,4 +60,3 @@ popd
 ln -s /usr/local/red5/license.txt /usr/share/doc/red5-license.txt
 ln -s /usr/local/fedora/docs /usr/share/doc/fedora
 curl https://raw.github.com/avalonmediasystem/avalon-felix/release/1.0.0/NOTICE > /usr/share/doc/avalon-felix.NOTICE
-

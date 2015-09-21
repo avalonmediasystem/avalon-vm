@@ -1,7 +1,9 @@
 #!/bin/bash
 echo "Starting build... "
 cd /home/makerpm
-runuser -l makerpm ./install_ffmpeg_src.sh
+if [ test -z "$(find /home/makerpm/rpmbuild/RPMS/x86_64 -maxdepth 1 -name 'ffmpeg-[12l]*.rpm')" ] ; then
+  runuser -l makerpm ./install_ffmpeg_src.sh
+fi
 rpm -Uvh /home/makerpm/rpmbuild/RPMS/x86_64/ffmpeg-[12l]*.rpm
 rc=$?
 echo "Build and install completed with return code $rc"
